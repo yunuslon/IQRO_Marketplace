@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
 import Home from '@/components/Home'
+import Outlet from '@/components/Outlet'
 
 var firebase = require('firebase/app')
 require('firebase/auth')
@@ -13,6 +14,14 @@ let router = new Router({
       path: '/home',
       name: 'Home',
       component: Home,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/outlet',
+      name: 'Outlet',
+      component: Outlet,
       meta: {
         requiresAuth: true
       }
