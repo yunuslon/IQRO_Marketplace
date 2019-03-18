@@ -14,52 +14,77 @@
   <!-- <v-navigation-drawer v-model="drawer" clipped app hide-overlay dark> -->
     <!-- <div id="app">
   <v-app id="inspire"> -->
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant.sync="mini"
-      hide-overlay
-      clipped app dark
-      stateless
-    >
-      <v-toolbar flat class="transparent">
-        <v-list class="pa-0">
-          <v-list-tile avatar>
-            <v-list-tile-avatar>
-              <img src="https://randomuser.me/api/portraits/men/85.jpg">
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>John Leider</v-list-tile-title>
-            </v-list-tile-content>
-            <v-list-tile-action>
-              <v-btn
-                icon
-                @click.stop="mini = !mini"
-              >
-                <v-icon>chevron_left</v-icon>
-              </v-btn>
-            </v-list-tile-action>
-          </v-list-tile>
-        </v-list>
-      </v-toolbar>
-      <v-list class="pt-0" dense>
-        <v-divider></v-divider>
-        <v-list-tile
-          v-for="item in items"
-          :key="item.title"
-        >
-          <v-list-tile-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-tile-action>
+<v-navigation-drawer
+v-model="drawer"
+  :mini-variant.sync="mini"
+  hide-overlay
+  clipped app dark
+  stateless>
+<v-toolbar flat class="transparent">
+      <v-list class="pa-0">
+        <v-list-tile avatar>
+          <v-list-tile-avatar>
+            <img src="https://randomuser.me/api/portraits/men/85.jpg">
+          </v-list-tile-avatar>
           <v-list-tile-content>
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            <v-list-tile-title>John Leider</v-list-tile-title>
           </v-list-tile-content>
+          <v-list-tile-action>
+            <v-btn
+              icon
+              @click.stop="mini = !mini"
+            >
+              <v-icon>chevron_left</v-icon>
+            </v-btn>
+          </v-list-tile-action>
         </v-list-tile>
       </v-list>
-    </v-navigation-drawer>
-  <!-- </v-app> -->
+    </v-toolbar>
+<v-list dense>
+    <v-divider></v-divider>
+<router-link to="/outlet" style="color:white;text-decoration:none;">
+<v-list-tile class="hov">
+<v-list-tile-action>
+<v-icon>store</v-icon>
+</v-list-tile-action>
+<v-list-tile-content>
+<v-list-tile-title>Outlet</v-list-tile-title>
+</v-list-tile-content>
+</v-list-tile>
+</router-link>
+<router-link to="/customer" style="color:white;text-decoration:none;">
+<v-list-tile class="hov">
+<v-list-tile-action>
+<v-icon>people_outline</v-icon>
+</v-list-tile-action>
+<v-list-tile-content>
+<v-list-tile-title>Customer</v-list-tile-title>
+</v-list-tile-content>
+</v-list-tile>
+</router-link>
+<router-link to="/product" style="color:white;text-decoration:none;">
+<v-list-tile class="hov">
+<v-list-tile-action>
+<v-icon>card_travel</v-icon>
+</v-list-tile-action>
+<v-list-tile-content>
+<v-list-tile-title>Product</v-list-tile-title>
+</v-list-tile-content>
+</v-list-tile>
+</router-link>
+<router-link to="/reward" style="color:white;text-decoration:none;">
+<v-list-tile class="hov">
+<v-list-tile-action>
+<v-icon>redeem</v-icon>
+</v-list-tile-action>
+<v-list-tile-content>
+<v-list-tile-title>Reward</v-list-tile-title>
+</v-list-tile-content>
+</v-list-tile>
+</router-link>
+</v-list>
+</v-navigation-drawer>
 </div>
-    <!-- </v-navigation-drawer> -->
-    <!-- </div> -->
 </template>
 <script>
 var firebase = require('firebase/app')
@@ -68,13 +93,7 @@ export default {
   data () {
     return {
       drawer: true,
-      items: [
-        { title: 'Outlet', icon: 'store' },
-        { title: 'Costomer', icon: 'people_outline' },
-        { title: 'Product', icon: 'card_travel' },
-        { title: 'Reward', icon: 'redeem' }
-      ],
-      mini: true,
+      mini: null,
       right: null
     }
   },
@@ -101,5 +120,8 @@ li {
 }
 a {
   color: #42b983;
+}
+.hov:hover{
+  background-color: #616161;
 }
 </style>
