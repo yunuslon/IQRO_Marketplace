@@ -6,6 +6,7 @@
 <b-row >
 <b-col></b-col>
 <b-col cols="12">
+<!-- <p>{{kos}}</p> -->
 <div class="card">
   <div class="card-header">
     <v-layout row justify-left>
@@ -70,13 +71,13 @@
   <tbody>
     <tr v-for="(i, index) in isi" :key="index">
       <th scope="row">{{index + 1}}</th>
-      <td>{{isi[index].nama}}</td>
-      <td>{{isi[index].username}}</td>
-      <td>{{isi[index].password}}</td>
-      <td>{{isi[index].nohp}}</td>
-      <td>{{isi[index].type}}</td>
-      <td>{{isi[index].alamat}}</td>
-      <td>{{isi[index].deskripsi}}</td>
+      <td>{{kos.nama}}</td>
+      <td>{{kos.username}}</td>
+      <td>{{kos.password}}</td>
+      <td>{{kos.no_hp}}</td>
+      <td>{{kos.type}}</td>
+      <td>{{kos.alamat}}</td>
+      <td>{{kos.deskripsi}}</td>
     </tr>
   </tbody>
 </table>
@@ -93,8 +94,7 @@
 <script>
 import Toolbar from './Toolbar.vue'
 import Footer from './Footer.vue'
-// import { db } from '../main'
-// const db = firebase.firestore()
+import { db } from '../main'
 export default {
   name: 'outlet',
   components: {
@@ -106,10 +106,20 @@ export default {
       msg: 'Welcome to Your Vue.js App',
       drawer: null,
       dialog: false,
+      kos: [],
       isi: [
         {nama: 'yunus', username: 'jjj', alamat: 'dgsfd', password: 'djald', nohp: '90809823', type: 'alkdsf', deskripsi: 'ldlfaksdfl'}
-      ]
+      ],
+      result: []
     }
+  },
+  created () {
+    db.collection('outlet').get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        // ${doc.id} => ${doc.data()}
+        this.kos = doc.data()
+      })
+    })
   }
 }
 </script>
