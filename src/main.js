@@ -11,6 +11,9 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import Vuesax from 'vuesax'
+import 'vuesax/dist/vuesax.css'
+Vue.use(Vuesax)
 Vue.use(BootstrapVue)
 var firebase = require('firebase/app')
 require('firebase/auth')
