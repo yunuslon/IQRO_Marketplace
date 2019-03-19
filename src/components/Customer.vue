@@ -62,7 +62,6 @@
     </v-dialog>
   </v-layout>
   </div>
-    
       <div class="card-body">
         <div class="table table-striped">
           <table class="table" >
@@ -121,8 +120,8 @@ import { db } from '../main'
 export default {
   name: 'Customer',
   components: {
-   'vtoolbar': Toolbar,
-   'vfooter': Footer
+    'vtoolbar': Toolbar,
+    'vfooter': Footer
   },
 
   data () {
@@ -130,14 +129,14 @@ export default {
       search: '',
       editId: '',
       customerData: {
-        'id' : '',
+        'id': '',
         'nama': '',
         'no_hp': '',
         'alamat': '',
         'point': ''
       },
       editCustomerData: {
-        'id' : '',
+        'id': '',
         'nama': '',
         'no_hp': '',
         'alamat': '',
@@ -146,23 +145,23 @@ export default {
       customer: []
     }
   },
-  created() {
+  created () {
     this.getCustomer()
   },
-  computed:{
-    sortedCustomer(){
-      return this.customer.slice().sort((a,b)=>{
+  computed: {
+    sortedCustomer () {
+      return this.customer.slice().sort((a, b) => {
         return a.nama - b.nama
       })
     }
   },
   methods: {
-    getCustomer() {
-      db.collection('costumer').get().then(querySnapshot =>{
+    getCustomer () {
+      db.collection('costumer').get().then(querySnapshot => {
         const customer = []
         const customerArray = []
         let i = 0
-        querySnapshot.forEach((doc)=>{
+        querySnapshot.forEach((doc) => {
           customerArray.push(doc.data())
           customerArray[i].id = doc.id
           customer.push(customerArray[i])

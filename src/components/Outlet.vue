@@ -24,16 +24,28 @@
           <v-container grid-list-md>
             <v-layout wrap >
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="outletData.nama" label="Nama" required></v-text-field>
+                <v-text-field v-model="outletData.nama" label="Nama" required :rules="namaRules"
+              :counter="15"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="outletData.username"  label="Username" hint="example of helper text only on focus"></v-text-field>
+                <v-text-field v-model="outletData.username"  label="Username" hint="example of helper text only on focus" :rules="usernameRules" :counter="25"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md4>
-                <v-text-field v-model="outletData.password" label="Password" hint="example of persistent helper text" required></v-text-field>
+                <v-text-field
+              v-model="outletData.password"
+              :append-icon="show1 ? 'visibility' : 'visibility_off'"
+              :rules="[rules.required, rules.min]"
+              :type="show1 ? 'text' : 'password'"
+              name="input-10-1"
+              label="Normal with hint text"
+              hint="At least 10 characters"
+              counter
+              @click:append="show1 = !show1"
+            ></v-text-field>
+                <!-- <v-text-field v-model="outletData.password" label="Password" hint="example of persistent helper text" required :rules="passwordRules" :counter="10"></v-text-field> -->
               </v-flex>
               <v-flex xs12 sm6 md6>
-                <v-text-field v-model="outletData.no_hp"  label="No. Hp" hint="example of helper text only on focus"></v-text-field>
+                <v-text-field v-model="outletData.no_hp"  label="No. Hp" hint="example of helper text only on focus" :rules="no_hpRules" :counter="12"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md6>
                  <v-select :items="['Onsite', 'on delevery']" label="Type" required v-model="outletData.type"  ></v-select>
@@ -56,7 +68,7 @@
     </v-dialog>
   </v-layout>
   </div>
-  <div class="card-body" style="text-align: center;">
+  <div class="card-body" style="text-align: center;" >
   <div class="table-responsive">
 <table class="table table-striped">
   <thead>
@@ -87,8 +99,7 @@
       <v-dialog v-model="dialogDel" persistent max-width="290">
         <template v-slot:activator="{ on }">
           <a href="#" dark v-on="on" data-toggle="tooltip" data-placement="bottom" title="Delete">
-           <v-icon>delete</v-icon> 
-          </a>
+           <v-icon>delete</v-icon> </a>
         </template>
         <v-card>
           <v-card-title class="headline">Apakah anda yakin igin menghapus data outlet {{i.nama}} ?</v-card-title>
@@ -129,6 +140,24 @@ export default {
   },
   data () {
     return {
+      show1: false,
+      rules: {
+        required: value => !!value || 'Required.',
+        min: v => v.length >= 8 || 'Min 8 characters',
+        emailMatch: () => ('The email and password you entered don\'t match')
+      },
+      namaRules: [
+        v => !!v || 'Name is required',
+        v => v.length <= 15 || 'Name must be less than 15 characters'
+      ],
+      usernameRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid'
+      ],
+      no_hpRules: [
+        v => !!v || 'Phone number is required',
+        v => v.length <= 12 || 'Name must be less than 12 characters'
+      ],
       outletData: {
         'nama': '',
         'username': '',
@@ -147,7 +176,7 @@ export default {
     }
   },
   methods: {
-    onSubmit(){
+    onSubmit () {
       db.collection('outlet').add(this.outletData).then(this.readData)
       this.outletData.nama = ''
       this.outletData.username = ''
@@ -156,16 +185,17 @@ export default {
       this.outletData.type = ''
       this.outletData.alamat = ''
       this.outletData.deskripsi = ''
-      alert('Data Berhasil Ditambahkan!')
+      // alert('Data Berhasil Ditambahkan!')
+      this.$vs.notify({title: 'Sukses!!', text: 'Data Berhasil Ditambahkan!!', color: 'primary', icon: 'done_all', position: 'top-right'})
       this.dialog = false
       // this.readData()
     },
-    readData(){
-      db.collection('outlet').get().then(querySnapshot =>{
+    readData () {
+      db.collection('outlet').get().then(querySnapshot => {
         const kos = []
         const kosArray = []
         let i = 0
-        querySnapshot.forEach((doc)=>{
+        querySnapshot.forEach((doc) => {
           kosArray.push(doc.data())
           kosArray[i].id = doc.id
           kos.push(kosArray[i])
@@ -175,26 +205,14 @@ export default {
         this.kos = kos
       })
     },
-    // ubah() {
-    //   this.dialog = true
-    //   this.outletData.nama = ''
-    //   this.outletData.username = ''
-    //   this.outletData.password = ''
-    //   this.outletData.no_hp = ''
-    //   this.outletData.type = ''
-    //   this.outletData.alamat = ''
-    //   this.outletData.deskripsi = ''
-    // },
-    hapus(id){
-      db.collection('outlet').doc(id).delete().then((data)=> {
-          this.readData()
-          this.dialogDel = false
-          function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
-      }
-      // let color = `rgb(${getRandomInt(0,255)},${getRandomInt(0,255)},${getRandomInt(0,255)})`
-        this.$vs.notify({title:'Notif',text:'Data Terhapus!',color:'dark',position:'top-center'})
-          // alert('Data Terhapus!')
+    hapus (id) {
+      db.collection('outlet').doc(id).delete().then((data) => {
+        this.readData()
+        this.dialogDel = false
+        function getRandomInt (min, max) {
+          return Math.floor(Math.random() * (max - min)) + min
+        }
+        this.$vs.notify({title: 'Notif', text: 'Data Terhapus!', color: 'primary', position: 'top-right', icon: 'warning'})
       })
     }
   },
