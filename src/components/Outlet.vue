@@ -96,10 +96,12 @@
       <td>{{i.deskripsi}}</td>
       <td>
       <v-layout row justify-center>
-      <v-dialog v-model="dialogDel" persistent max-width="290">
+      <v-dialog persistent max-width="290">
         <template v-slot:activator="{ on }">
-          <a href="#" dark v-on="on" data-toggle="tooltip" data-placement="bottom" title="Delete">
-           <v-icon>delete</v-icon> </a>
+          <!-- <a href="#" dark v-on="on" data-toggle="tooltip" data-placement="bottom" title="Delete">
+          <v-icon>delete</v-icon> </a> -->
+          <!-- <a href="#" v-on:click="onEdit(product)" data-toggle="tooltip" data-placement="bottom" title="Edit"> -->
+          <!-- <v-icon>create</v-icon></a> -->
         </template>
         <v-card>
           <v-card-title class="headline">Apakah anda yakin igin menghapus data outlet {{i.nama}} ?</v-card-title>
@@ -111,8 +113,11 @@
         </v-card>
       </v-dialog>
     </v-layout>
-          <a href="#" v-on:click="onEdit(product)" data-toggle="tooltip" data-placement="bottom" title="Edit">
-           <v-icon>create</v-icon></a>
+    <a href="#" v-on:click="hapus(i.id)" data-toggle="tooltip" data-placement="bottom" title="Delete">
+           <v-icon>delete</v-icon> </a>
+      <router-link :to="{ name: 'EditOutlet', params:{id: i.id} }">
+                    <v-icon>create</v-icon>
+                    </router-link>
       </td>
     </tr>
   </tbody>
@@ -206,14 +211,16 @@ export default {
       })
     },
     hapus (id) {
-      db.collection('outlet').doc(id).delete().then((data) => {
-        this.readData()
-        this.dialogDel = false
-        function getRandomInt (min, max) {
-          return Math.floor(Math.random() * (max - min)) + min
-        }
-        this.$vs.notify({title: 'Notif', text: 'Data Terhapus!', color: 'primary', position: 'top-right', icon: 'warning'})
-      })
+      if (confirm('Apakah anda yakin untuk menghapus data ini ?')){
+        db.collection('outlet').doc(id).delete().then((data) => {
+          this.readData()
+          this.dialogDel = false
+          function getRandomInt (min, max) {
+            return Math.floor(Math.random() * (max - min)) + min
+          }
+          this.$vs.notify({title: 'Notif', text: 'Data Terhapus!', color: 'primary', position: 'top-right', icon: 'warning'})
+        })
+      }
     }
   },
   mounted () {

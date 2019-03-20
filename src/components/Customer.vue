@@ -24,84 +24,91 @@
       </template>
       <v-card>
         <v-card-title>
-          <span class="headline">Outlet</span>
+          <span class="headline">Customer</span>
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
             <v-layout wrap>
-              <v-flex xs12 sm6 md4>
-                <v-text-field label="Nama" required></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field label="Username" hint="example of helper text only on focus"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md4>
-                <v-text-field label="Password" hint="example of persistent helper text" required></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md6>
-                <v-text-field label="No. Hp" hint="example of helper text only on focus"></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm6 md6>
-                 <v-select :items="['Onsite', 'on delevery']" label="Type" required ></v-select>
+              <v-flex xs12 >
+                <v-text-field label="Nama" v-model="customerData.nama" required></v-text-field>
               </v-flex>
               <v-flex xs12 >
-                 <v-textarea name="alamat" label="Alamat" value="" hint="Hint text"></v-textarea>
+                <v-text-field label="No. Hp" v-model="customerData.no_hp" hint="example of helper text only on focus"></v-text-field>
               </v-flex>
               <v-flex xs12 >
-                 <v-textarea name="deskripsi" label="Deskripsi" value="" hint="Hint text"></v-textarea>
+                <v-text-field label="Alamat" v-model="customerData.alamat" hint="example of helper text only on focus"></v-text-field>
               </v-flex>
+              <v-flex xs12 >
+                <v-text-field label="Point" v-model="customerData.point" hint="example of helper text only on focus" type="number"></v-text-field>
+              </v-flex>
+             
             </v-layout>
           </v-container>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click="dialog = false">Close</v-btn>
-          <v-btn color="blue darken-1" flat @click="dialog = false">Save</v-btn>
+          <v-btn color="blue darken-1" flat @click="tambahData">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- +++++++++++++++++++++++++++++edit++++++++++++++++++++++++++++ -->
+    <v-dialog v-model="dialogedit" persistent max-width="800px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Customer</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container grid-list-md>
+            <v-layout wrap>
+              <v-flex xs12 >
+                <v-text-field label="Nama" v-model="editcustomerData.nama" required></v-text-field>
+              </v-flex>
+              <v-flex xs12 >
+                <v-text-field label="No. Hp" v-model="editcustomerData.no_hp" hint="example of helper text only on focus"></v-text-field>
+              </v-flex>
+              <v-flex xs12 >
+                <v-text-field label="Alamat" v-model="editcustomerData.alamat" hint="example of helper text only on focus"></v-text-field>
+              </v-flex>
+              <v-flex xs12 >
+                <v-text-field label="Point" v-model="editcustomerData.point" hint="example of helper text only on focus" type="number"></v-text-field>
+              </v-flex>
+             
+            </v-layout>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" flat @click="dialogedit = false">Close</v-btn>
+          <v-btn color="blue darken-1" flat @click="tambahData">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
   </v-layout>
   </div>
       <div class="card-body">
-        <div class="table table-striped">
-          <table class="table" >
-            <thead>
-              <tr>
-                <th scope="col">
-                  Nama
-                </th>
-                <th>
-                  No. Hp
-                </th>
-                <th>
-                  Alamat
-                </th>
-                <th>
-                  Point
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="customer in sortedCustomer" v-bind:key="customer.id" >
-                <template >
-                  <td>
-                    {{customer.nama}}
-                  </td>
-                  <td>
-                    {{customer.no_hp}}
-                  </td>
-                  <td>
-                    {{customer.alamat}}
-                  </td>
-                  <td>
-                    {{customer.point}}
-                  </td>
-                </template>
-              </tr>
-
-            </tbody>
-          </table>
-        </div>
+        <v-data-table
+        :headers="headers"
+        :items="customer"
+        :search="search"
+        class="elevation-1"
+        >
+<template slot="items" slot-scope="props">
+<td>{{ props.item.nama }}</td>
+<td class="text-xs-right">{{ props.item.no_hp }}</td>
+<td class="text-xs-right">{{ props.item.alamat }}</td>
+<td class="text-xs-right">{{ props.item.point }}</td>
+<td class="text-xs-right">
+<a href="#" @click="editItem(props.item)" data-toggle="tooltip" data-placement="bottom" title="Edit">
+<v-icon small class=" mt-2" > edit </v-icon> </a>
+<a href="#" @click="hapus(props.item.id)" data-toggle="tooltip" data-placement="bottom" title="Delete">
+<v-icon small class="mt-2"> delete </v-icon></a>
+</td>
+</template>
+<template slot="no-data">
+<!-- <v-btn color="primary" @click="initialize">Reset</v-btn> -->
+</template>
+</v-data-table>
       </div>
     <!-- </div> -->
   </div>
@@ -128,20 +135,35 @@ export default {
     return {
       search: '',
       editId: '',
+      // editId: '',
       customerData: {
-        'id': '',
+        // 'id': '',
         'nama': '',
         'no_hp': '',
         'alamat': '',
         'point': ''
       },
-      editCustomerData: {
-        'id': '',
+      editcustomerData: {
+        // 'id': '',
         'nama': '',
         'no_hp': '',
         'alamat': '',
         'point': ''
       },
+      headers: [
+        {
+          text: 'Nama',
+          align: 'left',
+          sortable: false,
+          value: 'nama'
+        },
+        { text: 'No. Hp', value: 'no_hp', align: 'right' },
+        { text: 'Alamat', value: 'alamat', align: 'right' },
+        { text: 'Point', value: 'point', align: 'right' },
+        { text: 'Aksi', value: 'aksi', align: 'right' }
+      ],
+      dialog : false,
+      dialogedit: false,
       customer: []
     }
   },
@@ -156,6 +178,35 @@ export default {
     }
   },
   methods: {
+    tambahData () {
+      db.collection('costumer').add(this.customerData).then(this.getCustomer)
+      this.customerData.nama = ''
+      this.customerData.no_hp = ''
+      this.customerData.alamat = ''
+      this.customerData.point = ''
+      this.$vs.notify({title: 'Sukses!!', text: 'Data Berhasil Ditambahkan!!', color: 'primary', icon: 'done_all', position: 'top-right'})
+      this.dialog = false
+    },
+    hapus (id) {
+      if (confirm('Apakah anda yakin untuk menghapus data ini ?')){
+        db.collection('costumer').doc(id).delete().then((data) => {
+          this.getCustomer()
+          this.dialogDel = false
+          function getRandomInt (min, max) {
+            return Math.floor(Math.random() * (max - min)) + min
+          }
+          this.$vs.notify({title: 'Notif', text: 'Data Terhapus!', color: 'primary', position: 'top-right', icon: 'warning'})
+        })
+      }
+    },
+    editItem (item) {
+      this.editId = item.id
+      this.editcustomerData.nama = item.nama
+      this.editcustomerData.no_hp = item.no_hp
+      this.editcustomerData.alamat = item.alamat
+      this.editcustomerData.point = item.point
+      this.dialogedit = true
+    },
     getCustomer () {
       db.collection('costumer').get().then(querySnapshot => {
         const customer = []
