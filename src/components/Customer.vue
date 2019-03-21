@@ -73,14 +73,13 @@
               <v-flex xs12 >
                 <v-text-field label="Point" v-model="editcustomerData.point" hint="example of helper text only on focus" type="number"></v-text-field>
               </v-flex>
-             
             </v-layout>
           </v-container>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click="dialogedit = false">Close</v-btn>
-          <v-btn color="blue darken-1" flat @click="tambahData">Save</v-btn>
+          <v-btn color="blue darken-1" flat @click="UpdateItem(editcustomerData.id)">Save</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -144,7 +143,7 @@ export default {
         'point': ''
       },
       editcustomerData: {
-        // 'id': '',
+        'id': '',
         'nama': '',
         'no_hp': '',
         'alamat': '',
@@ -201,11 +200,27 @@ export default {
     },
     editItem (item) {
       this.editId = item.id
+      this.editcustomerData.id = item.id
       this.editcustomerData.nama = item.nama
       this.editcustomerData.no_hp = item.no_hp
       this.editcustomerData.alamat = item.alamat
       this.editcustomerData.point = item.point
       this.dialogedit = true
+    },
+    UpdateItem (id){
+      db.collection("costumer").doc(id).set(this.editcustomerData).then(
+        this.getCustomer)
+        this.editId = ''
+        this.editcustomerData.nama = ''
+        this.editcustomerData.no_hp = ''
+        this.editcustomerData.alamat = ''
+        this.editcustomerData.point = ''
+        this.dialogedit = false
+        this.$vs.notify({title: 'Notif', text: 'Data Berhasil Diubah!', color: 'primary', position: 'top-right', icon: 'warning'})
+
+    },
+    getidCustomer () {
+
     },
     getCustomer () {
       db.collection('costumer').get().then(querySnapshot => {
