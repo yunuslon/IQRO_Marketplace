@@ -6,7 +6,6 @@ import Outlet from '@/components/Outlet'
 import Customer from '@/components/Customer'
 import Product from '@/components/Product'
 import Reward from '@/components/Reward'
-import EditOutlet from '@/components/EditOutlet'
 
 var firebase = require('firebase/app')
 require('firebase/auth')
@@ -26,14 +25,6 @@ let router = new Router({
       path: '/outlet',
       name: 'Outlet',
       component: Outlet,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/editoutlet',
-      name: 'EditOutlet',
-      component: EditOutlet,
       meta: {
         requiresAuth: true
       }

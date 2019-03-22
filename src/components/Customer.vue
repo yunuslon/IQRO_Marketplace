@@ -41,7 +41,6 @@
               <v-flex xs12 >
                 <v-text-field label="Point" v-model="customerData.point" hint="example of helper text only on focus" type="number"></v-text-field>
               </v-flex>
-             
             </v-layout>
           </v-container>
         </v-card-text>
@@ -104,12 +103,8 @@
 <v-icon small class="mt-2"> delete </v-icon></a>
 </td>
 </template>
-<template slot="no-data">
-<!-- <v-btn color="primary" @click="initialize">Reset</v-btn> -->
-</template>
 </v-data-table>
       </div>
-    <!-- </div> -->
   </div>
 </b-col>
 <b-col></b-col>
@@ -134,9 +129,7 @@ export default {
     return {
       search: '',
       editId: '',
-      // editId: '',
       customerData: {
-        // 'id': '',
         'nama': '',
         'no_hp': '',
         'alamat': '',
@@ -153,7 +146,7 @@ export default {
         {
           text: 'Nama',
           align: 'left',
-          sortable: false,
+          sortable: true,
           value: 'nama'
         },
         { text: 'No. Hp', value: 'no_hp', align: 'right' },
@@ -161,7 +154,7 @@ export default {
         { text: 'Point', value: 'point', align: 'right' },
         { text: 'Aksi', value: 'aksi', align: 'right' }
       ],
-      dialog : false,
+      dialog: false,
       dialogedit: false,
       customer: []
     }
@@ -183,18 +176,15 @@ export default {
       this.customerData.no_hp = ''
       this.customerData.alamat = ''
       this.customerData.point = ''
-      this.$vs.notify({title: 'Sukses!!', text: 'Data Berhasil Ditambahkan!!', color: 'primary', icon: 'done_all', position: 'top-right'})
+      this.$vs.notify({ title: 'Sukses!!', text: 'Data Berhasil Ditambahkan!!', color: 'primary', icon: 'done_all' })
       this.dialog = false
     },
     hapus (id) {
-      if (confirm('Apakah anda yakin untuk menghapus data ini ?')){
+      if (confirm('Apakah anda yakin untuk menghapus data ini ?')) {
         db.collection('costumer').doc(id).delete().then((data) => {
           this.getCustomer()
           this.dialogDel = false
-          function getRandomInt (min, max) {
-            return Math.floor(Math.random() * (max - min)) + min
-          }
-          this.$vs.notify({title: 'Notif', text: 'Data Terhapus!', color: 'primary', position: 'top-right', icon: 'warning'})
+          this.$vs.notify({title: 'Notif', text: 'Data Terhapus!', color: 'danger', icon: 'warning'})
         })
       }
     },
@@ -207,20 +197,13 @@ export default {
       this.editcustomerData.point = item.point
       this.dialogedit = true
     },
-    UpdateItem (id){
-      db.collection("costumer").doc(id).set(this.editcustomerData).then(
-        this.getCustomer)
-        this.editId = ''
-        this.editcustomerData.nama = ''
-        this.editcustomerData.no_hp = ''
-        this.editcustomerData.alamat = ''
-        this.editcustomerData.point = ''
-        this.dialogedit = false
-        this.$vs.notify({title: 'Notif', text: 'Data Berhasil Diubah!', color: 'primary', position: 'top-right', icon: 'warning'})
-
-    },
-    getidCustomer () {
-
+    UpdateItem (id) {
+      db.collection('costumer').doc(id).set(this.editcustomerData).then(this.getCustomer, this.dialogedit = false, this.$vs.notify({title: 'Notif', text: 'Data Berhasil Diubah!', color: 'warning', icon: 'warning'}))
+      this.editId = ''
+      this.editcustomerData.nama = ''
+      this.editcustomerData.no_hp = ''
+      this.editcustomerData.alamat = ''
+      this.editcustomerData.point = ''
     },
     getCustomer () {
       db.collection('costumer').get().then(querySnapshot => {

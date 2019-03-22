@@ -4,7 +4,7 @@
     <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
     <v-toolbar-title>IQRO</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-toolbar-items class="hidden-sm-and-down">
+    <v-toolbar-items>
       <v-btn flat @click="logout">
       <v-icon>logout</v-icon>
       </v-btn>
@@ -24,10 +24,10 @@ v-model="drawer"
       <v-list class="pa-0">
         <v-list-tile avatar>
           <v-list-tile-avatar>
-            <img src="https://randomuser.me/api/portraits/men/85.jpg">
+            <img src="../assets/admin.png">
           </v-list-tile-avatar>
           <v-list-tile-content>
-            <v-list-tile-title>John Leider</v-list-tile-title>
+            <v-list-tile-title>Admin</v-list-tile-title>
           </v-list-tile-content>
           <v-list-tile-action>
             <v-btn
