@@ -195,7 +195,7 @@ export default {
       editId: '',
       headers: [
         {
-          text: 'Nama',
+          text: 'Nama Outlet',
           align: 'left',
           sortable: true,
           value: 'nama'

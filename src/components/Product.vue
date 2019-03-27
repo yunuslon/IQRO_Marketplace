@@ -106,9 +106,9 @@
 <template slot="items" slot-scope="props">
 <td>{{ props.item.nama_paket }}</td>
 <td class="text-xs-right">{{ props.item.jenis }}</td>
-<td class="text-xs-right">{{ props.item.harga_pokok }}</td>
-<td class="text-xs-right">{{ props.item.harga_beli }}</td>
-<td class="text-xs-right">{{ props.item.harga_jual }}</td>
+<td class="text-xs-right">Rp. {{ props.item.harga_pokok }}</td>
+<td class="text-xs-right">Rp. {{ props.item.harga_beli }}</td>
+<td class="text-xs-right">Rp. {{ props.item.harga_jual }}</td>
 <td class="text-xs-right">{{ props.item.point }}</td>
 <td class="text-xs-right">
 <a href="#" @click="editItem(props.item)" data-toggle="tooltip" data-placement="bottom" title="Edit">
